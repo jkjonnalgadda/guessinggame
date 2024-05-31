@@ -45,8 +45,8 @@
             </div>
             <div id="feedback"></div>
             <div>
-                <p>Guess the number (1-10): <input type="number" id="number-guess" min="1" max="10"></p>
-                <p>Guess the color:</p>
+                <p>Enter a number from (1-10): <input type="number" id="number-guess" min="1" max="10"> 🧐</p>
+                <p>Pick a color from below:🌈</p>
                 <div id="color-options">
                     <div class="color-option" data-color="#ff0000" style="background-color: #ff0000;"></div>
                     <div class="color-option" data-color="#ff7f00" style="background-color: #ff7f00;"></div>
@@ -113,15 +113,15 @@
             let feedback = '';
             if (numberGuess === correctNumber) {
                 points += 5;
-                feedback += 'The number guess is correct. ';
+                feedback += 'The number guess is correct. 😁 &ensp' + '';
             } else {
-                feedback += 'The number guess is wrong. ';
+                feedback += 'The number guess is wrong. 🙂 &ensp';
             }
             if (colorGuess === correctColor) {
                 points += 5;
-                feedback += 'The color guess is correct. ';
+                feedback += 'The color guess is correct. 😁';
             } else {
-                feedback += 'The color guess is wrong. ';
+                feedback += 'The color guess is wrong. 🙂 ';
             }
             score += points;
             document.getElementById('score-tab').innerText = `Total Score: ${score}`;
