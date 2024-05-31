@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+    <title>Color and Number Guessing Game</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="game-container">
+
+        <div class="main-left">
+            <h3>INSTRUCTIONS:-</h3>
+            <h3>Steps to be followed</h3>
+            <p>1. Here are the two blocks to predict a number and color.</p>
+             <p>2. Enter Number in number block and Click the respective color. </p>
+             <p>3. Click on Submit to check the prediction,    </p>
+             <p>once done click on next question till you reach the end of all 6 questions. </p>
+             <p>4.if you match any one among these two you will get 5 points for each.</p>
+            </br></br>
+             <p>Example : </br>if you guessed Number right and Colour wrong </br>
+             you will get 5 points for number and 0 points for colour.</br>
+            </br> so total points is :5 </br>and it will count your score and displays your score at
+             the right top on the screen till the completion of all questions.  </p>
+            
+            
+        </div>
+        <div class="main-right">
+
+
+            <div class="header">
+        ivy    :           Number & color Guess Game
+            </div>
+            <div id="gameload">
+            <h2 id="question-count"></h2>
+            <div id="eye-container">
+                <div id="number-eye" class="eye"></div>
+                <div id="color-eye" class="eye"></div>
+            </div>
+            <div id="feedback"></div>
+            <div>
+                <p>Guess the number (1-10): <input type="number" id="number-guess" min="1" max="10"></p>
+                <p>Guess the color:</p>
+                <div id="color-options">
+                    <div class="color-option" data-color="#ff0000" style="background-color: #ff0000;"></div>
+                    <div class="color-option" data-color="#ff7f00" style="background-color: #ff7f00;"></div>
+                    <div class="color-option" data-color="#ffff00" style="background-color: #ffff00;"></div>
+                    <div class="color-option" data-color="#00ff00" style="background-color: #00ff00;"></div>
+                    <div class="color-option" data-color="#0000ff" style="background-color: #0000ff;"></div>
+                    <div class="color-option" data-color="#4b0082" style="background-color: #4b0082;"></div>
+                    <div class="color-option" data-color="#9400d3" style="background-color: #9400d3;"></div>
+                </div>
+                <div class="buttons">
+                    <button id="submit-button">Submit</button>
+                    <button id="next-button" style="display: none;">Next Question</button>
+                </div>
+            </div>
+            <div id="score-tab"></div>
+        </div>
+        <div id="scorePage">
+            <h1>Congratulations...!🤩 </br>Your Total Score is: <span id="score-num"></span>🎉🎉</h1>
+        </div>
+          
+
+        </div>
+
+    </div>
+
+    <script>
+        let score = 0;
+        let questionCount = 1;
+        let correctNumber, correctColor;
+
+        // Generate a random number between 1 and 10
+        function generateRandomNumber() {
+            return Math.floor(Math.random() * 10) + 1;
+        }
+
+        // Generate a random color from rainbow colors
+        function generateRandomColor() {
+            const colors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Initialize the game
+        function initializeGame() {
+            document.getElementById('question-count').innerText = `Question ${questionCount}`;
+            document.getElementById('number-eye').innerText = '';
+            const colorEye = document.getElementById('color-eye');
+            correctColor = generateRandomColor();
+            colorEye.innerText = '';
+            colorEye.style.backgroundColor = 'white';
+            colorEye.dataset.color = correctColor;
+            document.getElementById('submit-button').style.display = 'block';
+            document.getElementById('next-button').style.display = 'none';
+            document.getElementById('color-options').style.pointerEvents = 'auto';
+            document.querySelectorAll('.color-option').forEach(option => option.style.opacity = '1');
+            document.getElementById('feedback').innerText = '';
+        }
+
+        // Check if the guessed number and color match the generated ones
+        function checkGuesses() {
+            const numberGuess = parseInt(document.getElementById('number-guess').value);
+            const colorGuess = document.querySelector('.color-option.selected').dataset.color;
+            correctNumber = generateRandomNumber();
+            let points = 0;
+            let feedback = '';
+            if (numberGuess === correctNumber) {
+                points += 5;
+                feedback += 'The number guess is correct. ';
+            } else {
+                feedback += 'The number guess is wrong. ';
+            }
+            if (colorGuess === correctColor) {
+                points += 5;
+                feedback += 'The color guess is correct. ';
+            } else {
+                feedback += 'The color guess is wrong. ';
+            }
+            score += points;
+            document.getElementById('score-tab').innerText = `Total Score: ${score}`;
+            document.getElementById('feedback').innerText = feedback;
+            document.getElementById('submit-button').style.display = 'none';
+            document.getElementById('next-button').style.display = 'block';
+            document.getElementById('color-options').style.pointerEvents = 'none';
+            document.querySelectorAll('.color-option').forEach(option => option.style.opacity = '0');
+            document.getElementById('number-eye').innerText = correctNumber;
+            document.getElementById('color-eye').style.backgroundColor = correctColor;
+            document.getElementById('number-guess').value = '';
+        }
+
+        // Event listeners
+        document.getElementById('submit-button').addEventListener('click', checkGuesses);
+        document.getElementById('next-button').addEventListener('click', function () {
+            questionCount++;
+            if (questionCount <= 6) {
+                initializeGame();
+            } else {
+                // document.getElementById('next-button').style.display = 'none';
+                // document.getElementById('score').style.display = 'block';
+                document.getElementById('scorePage').style.display = 'block';
+                document.getElementById('gameload').style.display = 'none';
+                document.getElementById('score-num').innerHTML =`${score}`;
+                
+            }
+        });
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.color-option').forEach(option => option.classList.remove('selected'));
+                option.classList.add('selected');
+            });
+        });
+
+        // Initialize the game when the page loads
+        window.onload = initializeGame;
+    </script>
+</body>
+
+</html>
